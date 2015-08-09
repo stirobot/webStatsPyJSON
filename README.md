@@ -2,8 +2,8 @@
 A JSON "software sensor" for pinging and other stuff that uses Flask and other fun stuff
 
 This uses:
-Python
-the Flask framework
+Python,
+the Flask framework, and
 someone else's callback (jsonp) code
 
 It is sample code to show how this stort of things work.
