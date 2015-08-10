@@ -1,7 +1,12 @@
 #Thanks for the callback code https://gist.github.com/aisipos/1094140
-import subprocess
-import time
-import json
+#TODO: 
+##pass a value to ping anything
+##break this out so there is one sensor and other stuff is in different dirs?
+##write other sensors
+##add a function that figures out what OS is running
+
+import ping
+import memuse
 from functools import wraps
 from flask import Flask, url_for, jsonify, redirect, request, current_app
 
@@ -23,21 +28,12 @@ def support_jsonp(f):
 			return f(*args, **kwargs)
 	return decorated_function
 
-def pingSomeone():
-	output = subprocess.Popen(["ping.exe","-n", "1", "google.com"],stdout = subprocess.PIPE).communicate()[0]
-	#print(output)
-	#parse the output here
-	msPos=output.find("time=")
-	msEnd=output.find("ms")
-	pingTime=(output[msPos+5:msEnd])
-	return pingTime
-
 @app.route('/ping')
 @support_jsonp
-def index():
+def pinger():
 	global maxPing
 	global minPing
-	pingT=int(pingSomeone())
+	pingT=int(ping.pingSomeone())
 	if (pingT > maxPing):
 		maxPing = pingT
 	if (pingT < minPing):
@@ -45,7 +41,15 @@ def index():
 	pingJson={"stats":[{"ping":pingT,"maxPing":maxPing,"minPing":minPing}]}
 	resp = jsonify(pingJson)
 	resp.status_code = 200
+	return resp
 
+@app.route('/memused')
+@support_jsonp
+def memav():
+	memused = int(memuse.memuse())
+	memJson = {"memused":memused}
+	resp = jsonify(memJson)
+	resp.status_code = 200
 	return resp
 
 if __name__ == '__main__':
