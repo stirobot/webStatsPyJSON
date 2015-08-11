@@ -28,6 +28,10 @@ def support_jsonp(f):
 			return f(*args, **kwargs)
 	return decorated_function
 
+@app.route('/ping')
+def pinginfo():
+	return 'please use `host`:5000/ping/`targetHost` to ping a specific host'
+
 @app.route('/ping/<string:whoToPing>')
 @support_jsonp
 def pinger(whoToPing):
