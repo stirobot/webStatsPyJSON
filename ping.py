@@ -4,9 +4,9 @@
 import subprocess
 import platform
 
-def pingSomeone():
+def pingSomeone(whoToPing):
 	if platform.system() == 'Windows':
-		output = subprocess.Popen(["ping.exe","-n", "1", "google.com"],stdout = subprocess.PIPE).communicate()[0]
+		output = subprocess.Popen(["ping.exe","-n", "1", whoToPing],stdout = subprocess.PIPE).communicate()[0]
 	if platform.system() == 'Linux':
 		output = subprocess.Popen(["ping","-c","1","google.com"],stdout = subprocess.PIPE).communicate()[0]
 	#print(output)

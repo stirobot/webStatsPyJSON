@@ -28,12 +28,12 @@ def support_jsonp(f):
 			return f(*args, **kwargs)
 	return decorated_function
 
-@app.route('/ping')
+@app.route('/ping/<string:whoToPing>')
 @support_jsonp
-def pinger():
+def pinger(whoToPing):
 	global maxPing
 	global minPing
-	pingT=int(ping.pingSomeone())
+	pingT=int(ping.pingSomeone(whoToPing))
 	if (pingT > maxPing):
 		maxPing = pingT
 	if (pingT < minPing):
