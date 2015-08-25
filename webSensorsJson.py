@@ -37,7 +37,7 @@ def pinginfo():
 def pinger(whoToPing):
 	global maxPing
 	global minPing
-	pingT=int(ping.pingSomeone(whoToPing))
+	pingT=float(ping.pingSomeone(whoToPing))
 	if (pingT > maxPing):
 		maxPing = pingT
 	if (pingT < minPing):
