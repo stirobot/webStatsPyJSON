@@ -4,11 +4,11 @@
 ##break this out so there is one sensor and other stuff is in different dirs?
 ##write other sensors
 ##add a function that figures out what OS is running
-
+import os.path
 import ping
 import memuse
 from functools import wraps
-from flask import Flask, url_for, jsonify, redirect, request, current_app
+from flask import Flask, url_for, jsonify, redirect, request, current_app, send_from_directory
 
 app = Flask(__name__)
 
@@ -16,6 +16,7 @@ global maxPing
 global minPing
 maxPing = 0
 minPing = 100
+
 
 def support_jsonp(f):
 	@wraps(f)
@@ -30,7 +31,7 @@ def support_jsonp(f):
 
 @app.route('/ping')
 def pinginfo():
-	return 'please use `host`:5000/ping/`targetHost` to ping a specific host'
+	return 'please use `host`/ping/`targetHost` to ping a specific host'
 
 @app.route('/ping/<string:whoToPing>')
 @support_jsonp
@@ -57,4 +58,4 @@ def memav():
 	return resp
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=80)
