@@ -1,12 +1,12 @@
 #Thanks for the callback code https://gist.github.com/aisipos/1094140
 #TODO: 
-##pass a value to ping anything
 ##break this out so there is one sensor and other stuff is in different dirs?
 ##write other sensors
 ##add a function that figures out what OS is running
 import os.path
 import ping
 import memuse
+import alcoholsensor
 from functools import wraps
 from flask import Flask, url_for, jsonify, redirect, request, current_app, send_from_directory
 
@@ -54,6 +54,15 @@ def memav():
 	memused = int(memuse.memuse())
 	memJson = {"memused":memused}
 	resp = jsonify(memJson)
+	resp.status_code = 200
+	return resp
+
+@app.route('/alcohol')
+@support_jsonp
+def alc():
+	alccontent = int(alcoholsensor.alcoholcontent())
+	alcJson = {"alcoholppm":alccontent}
+	resp = jsonify(alcJson)
 	resp.status_code = 200
 	return resp
 
