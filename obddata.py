@@ -1,5 +1,7 @@
 #OBD II data using pyobd
 import obd
+from obd import OBDCommand
+from obd.utils import unhex
 
 #call this from the main program...because we only want to do it once
 def setupOBD():
@@ -7,6 +9,7 @@ def setupOBD():
 	while not(connection.is_connected()):
 		connection = obd.OBD('/dev/rfcomm0') 
 		#try indefinitely to connect
+	return
 
 def rpm():
 	response = connection.query(obd.commands.RPM)
@@ -39,3 +42,8 @@ def intake_temp():
 def throttle_pos():
 	response = connection.query(obd.commands.THROTTLE_POS)
 	return response.value
+
+def voltage():
+	response = connection.query(obd.commands.[1][42])
+	readyresponse = unhex(response)
+	return readyresponse #needs to be tested with a real car...not sure if this will work
