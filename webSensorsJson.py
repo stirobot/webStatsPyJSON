@@ -7,7 +7,6 @@ import os.path
 import ping
 import memuse
 import alcoholsensor
-import obddata
 from functools import wraps
 from flask import Flask, url_for, jsonify, redirect, request, current_app, send_from_directory
 
@@ -18,7 +17,6 @@ global minPing
 maxPing = 0
 minPing = 100
 
-obddata.setupOBD()
 
 def support_jsonp(f):
 	@wraps(f)

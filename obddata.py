@@ -9,41 +9,43 @@ def setupOBD():
 	while not(connection.is_connected()):
 		connection = obd.OBD('/dev/rfcomm0') 
 		#try indefinitely to connect
-	return
+	return (connection)
 
-def rpm():
+def rpm(connection):
 	response = connection.query(obd.commands.RPM)
 	return response.value
 
-def engine_load():
+def engine_load(connection):
 	response = connection.query(obd.commands.ENGINE_LOAD)
 	return response.value
 
-def coolant_temp():
+def coolant_temp(connection):
 	response = connection.query(obd.commands.COOLANT_TEMP)
 	return response.value
 
-def intake_pressure():
+def intake_pressure(connection):
 	response = connection.query(obd.commands.INTAKE_PRESSURE)
 	return response.value 
 
-def speed():
+def speed(connection):
 	response = connection.query(obd.commands.SPEED)
 	return response.value
 
-def timing_advance():
+def timing_advance(connection):
 	response = connection.query(obd.commands.TIMING_ADVANCE)
 	return response.value
 
-def intake_temp():
+def intake_temp(connection):
 	response = connection.query(obd.commands.INTAKE_TEMP)
 	return response.value
 
-def throttle_pos():
+def throttle_pos(connection):
 	response = connection.query(obd.commands.THROTTLE_POS)
 	return response.value
 
-def voltage():
-	response = connection.query(obd.commands.[1][42])
+def voltage(connection):
+	response = connection.query(obd.commands[1][42])
 	readyresponse = unhex(response)
 	return readyresponse #needs to be tested with a real car...not sure if this will work
+
+#test if a custom obdII code for the brz oil temp can be added
