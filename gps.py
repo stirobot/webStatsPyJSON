@@ -1,30 +1,27 @@
 #gps sensor 
 #for use with the seeed grove gps sensor (SIM28 based)
 #uses UART (serial) 9600 8-N-1
-import mraa, time, sys, signal, atexit
-import pyupm_ublox6 as upmUblox6
+import mraa
 
-def setupGPS(pin):
-	gpsSensor = upmUblox6.Ublox6(pin)	
-	if (not gpsSensor.setupTty(upmUblox6.cvar.int_B9600)):
-		print "Failed to setup tty port parameters"
-		sys.exit(0)
-	return gpsSensor
-
-def getLocation(gpssensor):
-	bufferLength = 256
-	nmeaBuffer = upmUblox6.charArray(bufferLength)
-	if (gpsSensor.dataAvailable()):
-		rv = gpsSensor.readData(nmeaBuffer, bufferLength)
-
-		numlines= 0
-		if (rv > 0):
-			GPSData = ""
-			# read only the number of characters
-			# specified by myGPSSensor.readData
-			for x in range(rv):
-				GPSData += nmeaBuffer.__getitem__(x)
-
-		if (rv < 0): # some sort of read error occured
-			print "Port read error."
-	return GPSData
+def getLocation():
+	u = mraa.Uart(0)
+	u.setBaudRate(9600)	
+	GPSData = [0,0,0]
+	while(True):
+		if(u.dataAvailable()):
+			buff = u.readStr(256)
+			if buff.find("GPGGA") != -1: #this is the easiest to parse
+				smallerbuff = buff[buff.find("GPGGA"): buff.find("\n")]
+				splitbuff = smallerbuff.strip().split(",")
+				#print(splitbuff)
+				latnmea = splitbuff[2]
+				latdir = splitbuff[3]
+				lonnmea = splitbuff[4]
+				londir = splitbuff[5]
+				lat = float(latnmea[0:2]) + float(latnmea[2:])/60
+				lon = float(lonnmea[0:3]) + float(lonnmea[3:])/60
+				if londir == "W":
+					lon = lon * -1
+				alt = float(splitbuff[9])
+				GPSData = [lat,lon,alt]
+				return GPSData

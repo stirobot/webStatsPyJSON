@@ -11,8 +11,6 @@ from flask import Flask, url_for, jsonify, redirect, request, current_app, send_
 app = Flask(__name__)
 
 obdconn = obddata.setupOBD()
-gpsconn = gps.setupGPS(0)
-
 
 def support_jsonp(f):
 	@wraps(f)
@@ -28,8 +26,8 @@ def support_jsonp(f):
 @app.route('/gpsloc')
 @support_jsonp
 def gpsloc():
-	location = gps.getLocation(gpsconn)
-	locationJson = {"location":{"lat":location[0],"long":location[1]}}
+	location = gps.getLocation()
+	locationJson = {"gpslocation":[{"lat":location[0],"long":location[1],"altitude":location[2]}]}
 	resp = jsonify(locationJson)
 	resp.status_code = 200
 	return resp
